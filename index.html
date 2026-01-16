@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Font Text Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Nosifer&family=Eater&family=Metal+Mania&family=Monoton&family=Rubik+Glitch&family=Rubik+Burned&family=Fascinate+Inline&family=Pirata+One&family=Butcherman&family=Freckle+Face&family=Fontdiner+Swanky&family=Rye&family=Special+Elite&family=Audiowide&family=Orbitron&family=Press+Start+2P&family=VT323&family=Iceland&family=Cinzel+Decorative&family=EB+Garamond&family=Cormorant&family=Crimson+Text&family=Libre+Baskerville&family=Spectral&family=Sorts+Mill+Goudy&family=Cardo&family=Archivo+Black&family=Bungee&family=Righteous&family=Bebas+Neue&family=Oswald&family=Permanent+Marker&family=Satisfy&family=Staatliches&family=Teko&family=Russo+One&family=Black+Ops+One&family=Alfa+Slab+One&family=Ultra&family=Passion+One&family=Bungee+Shade&family=Emblema+One&family=Faster+One&family=Megrim&family=Vampiro+One&family=New+Rocker&family=Metal&family=Jolly+Lodger&family=Lacquer&family=Sancreek&family=Rammetto+One&family=Warnes&family=Kranky&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .button-group button {
+            margin-top: 0;
+        }
+        
+        #saveBtn {
+            background: #28a745;
+        }
+        
+        #saveBtn:hover {
+            background: #218838;
+        }
+        
+        #output {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            min-height: 100px;
+            font-size: 48px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        
+        .letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            height: 72px;
+            line-height: 72px;
+            overflow: visible;
+        }
+        
+        .space {
+            display: inline-block;
+            width: 0.5em;
+        }
+        
+        .newline {
+            display: block;
+            height: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Multi-Font Text Generator</h1>
+        <textarea id="input" rows="4" placeholder="Type your sentence here..."></textarea>
+        <div class="button-group">
+            <button onclick="generateMultiFontText()">Generate Multi-Font Text</button>
+            <button id="saveBtn" onclick="saveAsImage()">💾 Save as Image</button>
+        </div>
+        <div id="output"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Grouped fonts by visual weight/thickness for better balance
+        const lightFonts = [
+            'Georgia',
+            'Times New Roman',
+            'Garamond',
+            'Palatino',
+            'Cinzel Decorative',
+            'Iceland',
+            'Special Elite',
+            'EB Garamond',
+            'Cormorant',
+            'Crimson Text',
+            'Libre Baskerville',
+            'Spectral',
+            'Sorts Mill Goudy',
+            'Cardo'
+        ];
+        
+        const mediumFonts = [
+            'Arial',
+            'Verdana',
+            'Trebuchet MS',
+            'Courier New',
+            'Metal Mania',
+            'Pirata One',
+            'Rye',
+            'Audiowide',
+            'Orbitron',
+            'Fontdiner Swanky',
+            'Archivo Black',
+            'Bungee',
+            'Righteous',
+            'Bebas Neue',
+            'Oswald',
+            'Permanent Marker',
+            'Satisfy',
+            'Staatliches',
+            'Teko',
+            'Russo One'
+        ];
+        
+        const boldFonts = [
+            'Impact',
+            'Comic Sans MS',
+            'Creepster',
+            'Monoton',
+            'Rubik Burned',
+            'Freckle Face',
+            'Press Start 2P',
+            'Black Ops One',
+            'Alfa Slab One',
+            'Ultra',
+            'Passion One',
+            'Bungee Shade',
+            'Emblema One',
+            'Faster One'
+        ];
+        
+        const decorativeFonts = [
+            'Nosifer',
+            'Eater',
+            'Rubik Glitch',
+            'Fascinate Inline',
+            'Butcherman',
+            'VT323',
+            'Megrim',
+            'Vampiro One',
+            'New Rocker',
+            'Metal',
+            'Jolly Lodger',
+            'Lacquer',
+            'Sancreek',
+            'Rammetto One',
+            'Warnes',
+            'Kranky'
+        ];
+
+        function generateMultiFontText() {
+            const input = document.getElementById('input').value;
+            const output = document.getElementById('output');
+            
+            if (!input.trim()) {
+                output.innerHTML = '<p style="color: #999; font-size: 16px;">Please enter some text first!</p>';
+                return;
+            }
+            
+            // Create a balanced mix by taking MORE fonts from each weight category
+            const balancedFonts = [
+                ...lightFonts.sort(() => Math.random() - 0.5).slice(0, 7),
+                ...mediumFonts.sort(() => Math.random() - 0.5).slice(0, 10),
+                ...boldFonts.sort(() => Math.random() - 0.5).slice(0, 7),
+                ...decorativeFonts.sort(() => Math.random() - 0.5).slice(0, 8)
+            ];
+            
+            // Shuffle the balanced selection
+            const shuffledFonts = balancedFonts.sort(() => Math.random() - 0.5);
+            
+            let result = '';
+            let fontIndex = 0;
+            
+            for (let i = 0; i < input.length; i++) {
+                const char = input[i];
+                
+                if (char.match(/[a-zA-Z]/)) {
+                    const font = shuffledFonts[fontIndex % shuffledFonts.length];
+                    result += `<span class="letter" style="font-family: '${font}';">${char}</span>`;
+                    fontIndex++;
+                } else if (char === ' ') {
+                    result += `<span class="space">&nbsp;</span>`;
+                } else if (char === '\n') {
+                    result += `<br class="newline">`;
+                } else {
+                    result += `<span class="letter">${char}</span>`;
+                }
+            }
+            
+            output.innerHTML = result;
+        }
+        
+        function saveAsImage() {
+            const output = document.getElementById('output');
+            
+            if (!output.innerHTML || output.innerHTML.includes('Please enter some text first!')) {
+                alert('Please generate some text first!');
+                return;
+            }
+            
+            // Wait a moment for fonts to load, then capture
+            setTimeout(() => {
+                html2canvas(output, {
+                    backgroundColor: '#f8f9fa',
+                    scale: 3,
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true
+                }).then(canvas => {
+                    canvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.download = 'multi-font-text-' + Date.now() + '.png';
+                        link.href = url;
+                        link.click();
+                        URL.revokeObjectURL(url);
+                    });
+                }).catch(err => {
+                    console.error('Error generating image:', err);
+                    alert('Error saving image. Please try again.');
+                });
+            }, 500);
+        }
+    </script>
+</body>
+</html>
