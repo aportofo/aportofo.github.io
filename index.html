@@ -58,6 +58,39 @@
             background: #764ba2;
         }
         
+        .alignment-selector {
+            margin-top: 20px;
+        }
+        
+        .alignment-selector label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .alignment-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .align-btn {
+            flex: 1;
+            padding: 10px;
+            background: #e9ecef;
+            color: #495057;
+            margin-top: 0;
+        }
+        
+        .align-btn:hover {
+            background: #ced4da;
+        }
+        
+        .align-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
         .button-group {
             display: flex;
             gap: 10px;
@@ -85,6 +118,7 @@
             font-size: 48px;
             line-height: 1.4;
             word-wrap: break-word;
+            text-align: left;
         }
         
         .letter {
@@ -112,6 +146,14 @@
     <div class="container">
         <h1>🎨 Multi-Font Text Generator</h1>
         <textarea id="input" rows="4" placeholder="Type your sentence here..."></textarea>
+        <div class="alignment-selector">
+            <label>Text Alignment:</label>
+            <div class="alignment-buttons">
+                <button class="align-btn active" onclick="setAlignment('left')">⬅️ Left</button>
+                <button class="align-btn" onclick="setAlignment('center')">↕️ Center</button>
+                <button class="align-btn" onclick="setAlignment('right')">➡️ Right</button>
+            </div>
+        </div>
         <div class="button-group">
             <button onclick="generateMultiFontText()">Generate Multi-Font Text</button>
             <button id="saveBtn" onclick="saveAsImage()">💾 Save as Image</button>
@@ -121,6 +163,22 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+        let currentAlignment = 'left';
+        
+        function setAlignment(alignment) {
+            currentAlignment = alignment;
+            
+            // Update button states
+            document.querySelectorAll('.align-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Apply alignment to output
+            const output = document.getElementById('output');
+            output.style.textAlign = alignment;
+        }
+        
         // Grouped fonts by visual weight/thickness for better balance
         const lightFonts = [
             'Georgia',
